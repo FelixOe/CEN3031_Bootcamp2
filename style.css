@@ -6,3 +6,7 @@
   max-height: 400px;
   overflow: auto;
 }
+
+.col-no-padding {
+  padding: 0px;
+}
