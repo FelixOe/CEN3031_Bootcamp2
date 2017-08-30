@@ -10,3 +10,11 @@
 .col-no-padding {
   padding: 0px;
 }
+
+.errormsg {
+  color: red;
+}
+
+.flash {
+  color: green;
+}

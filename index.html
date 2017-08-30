@@ -9,7 +9,7 @@
     <div class="row">
         <h1>UF Directory App</h1>
     </div>
-    <div class="row" ng-controller="ListingsController">
+    <div class="row" ng-controller="ListingsController" ng-cloak>
         <div class="col-md-6">
             <div class="input-group" id="searchBar">
                 <span class="input-group-addon" id="sizing-addon1"><span class="glyphicon glyphicon-search"></span></span>
@@ -22,52 +22,40 @@
                         <th>Building Name</th>
                         <th>Delete</th>
                     </tr>
-                    <tr ng-repeat="entry in listings | filter:searchTerm" ng-click="showDetails($index);">
+                    <tr ng-repeat="entry in listings | filter:searchTerm" ng-click="showDetails(entry);">
                         <td>{{entry.code}}</td>
                         <td>{{entry.name}}</td>
-                        <td><div class="btn btn-danger" ng-click="deleteListing($index);">Delete</div></td>
+                        <td><div class="btn btn-danger" ng-click="deleteListing(entry);">Delete</div></td>
                     </tr>
                 </table>
             </div>
-            <div id="addListingForm">
+            <form id="addListingForm" name="addListingForm" ng-submit="addListing();" novalidate>
+                <span class="flash" ng-show="msgdisp">{{ message }}</span>
                 <div class="form-group">
                     <label for="code">Code:</label>
-                    <input type="text" class="form-control" id="code" ng-model="addCode">
+                    <input type="text" class="form-control" id="code" name="code" ng-model="newListing.code" required>
+                    <span ng-show="addListingForm.code.$error.required && addListingForm.code.$dirty" class="errormsg">Please enter a code!</span>
                 </div>
                 <div class="form-group">
                     <label for="name">Name:</label>
-                    <input type="text" class="form-control" id="name" ng-model="addName">
+                    <input type="text" class="form-control" id="name" name="name" ng-model="newListing.name" required>
+                    <span ng-show="addListingForm.name.$error.required && addListingForm.name.$dirty" class="errormsg">Please enter a name!</span>
                 </div>
                 <div class="form-group">
                     <label for="latitude">Latitude:</label>
-                    <input type="text" class="form-control" id="latitude" ng-model="addLatitude">
+                    <input type="text" class="form-control" id="latitude" name="latitude" ng-model="newListing.coordinates.latitude">
                 </div>
                 <div class="form-group">
                     <label for="Longitude">Longitude:</label>
-                    <input type="text" class="form-control" id="longitude" ng-model="addLongitude">
+                    <input type="text" class="form-control" id="longitude" name="longitude" ng-model="newListing.coordinates.longitude">
                 </div>
                 <div class="form-group">
                     <label for="address">Address:</label>
-                    <input type="text" class="form-control" id="address" ng-model="addAddress">
+                    <input type="text" class="form-control" id="address" ng-model="newListing.address">
                 </div>
-                <div class="form-group">
-                    <label for="city">City:</label>
-                    <input type="text" class="form-control" id="city" ng-model="addCity">
-                </div>
-                <div class="form-group">
-                    <label for="stateAbrv">State abbreviation:</label>
-                    <input type="text" class="form-control" id="stateAbrv" ng-model="addState">
-                </div>
-                <div class="form-group">
-                    <label for="zip">Zip code:</label>
-                    <input type="text" class="form-control" id="zip" ng-model="addZip">
-                </div>
-                <div class="form-group">
-                    <label for="country">Country:</label>
-                    <input type="text" class="form-control" id="country" ng-model="addCountry">
-                </div>
-                <input type="button" class="btn btn-success" value="Add" ng-click="addListing();">
-            </div>
+                <input type="submit" class="btn btn-success" value="Add" ng-disabled="addListingForm.code.$invalid || addListingForm.name.$invalid">
+                <input type="button" class="btn btn-warning" value="Reset" ng-click="resetModel();">
+            </form>
         </div>
         <div class="col-md-6">
             <div class="jumbotron">

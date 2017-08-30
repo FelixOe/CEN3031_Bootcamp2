@@ -2,52 +2,36 @@ angular.module('listings').controller('ListingsController', ['$scope', 'Listings
     function ($scope, Listings) {
         $scope.listings = Listings;
         $scope.detailedInfo = undefined;
+        $scope.msgdisp = false;
+        $scope.message = '';
 
         //Model for Search
         $scope.searchTerm = '';
 
         //Model for new listings
-        $scope.addCode = '';
-        $scope.addName = '';
-        $scope.addLatitude = '';
-        $scope.addLongitude = '';
-        $scope.addAddress = '';
-        $scope.addCity = '';
-        $scope.addState = '';
-        $scope.addZip = '';
-        $scope.addCountry = '';
-
+        $scope.newListing = {};
 
         $scope.addListing = function () {
-            var newlisting = {
-                code: $scope.addCode,
-                name: $scope.addName,
-                coordinates: {
-                    latitude: $scope.addLatitude,
-                    longitude: $scope.addLongitude
-                },
-                address: $scope.addAddress + ', ' + $scope.addCity + ', ' + $scope.addState + ' ' + $scope.addZip + ', ' + $scope.addCountry
-            };
-            $scope.listings.splice(0, 0, newlisting);
-            resetModel();
+            $scope.listings.splice(0, 0, $scope.newListing);
+            $scope.resetModel();
+            $scope.msgdisp = true;
+            $scope.message = 'The building has been added successfully!';
+            $scope.addListingForm.$setPristine();
         };
-        $scope.deleteListing = function (index) {
+        $scope.deleteListing = function (listing) {
+            debugger;
             $scope.detailedInfo = undefined;
-            $scope.listings.splice(index, 1);
+            $scope.listings.splice($scope.listings.indexOf(listing), 1);
+            $scope.msgdisp = true;
+            $scope.message = 'The building has been deleted successfully!';
         };
-        $scope.showDetails = function (index) {
-            $scope.detailedInfo = Listings[index];
+        $scope.showDetails = function (listing) {
+            $scope.detailedInfo = Listings[$scope.listings.indexOf(listing)];
+            $scope.msgdisp = false;
         };
-        resetModel = function () {
-            $scope.addCode = '';
-            $scope.addName = '';
-            $scope.addLatitude = '';
-            $scope.addLongitude = '';
-            $scope.addAddress = '';
-            $scope.addCity = '';
-            $scope.addState = '';
-            $scope.addZip = '';
-            $scope.addCountry = '';
-        }
+        $scope.resetModel = function () {
+            $scope.newListing = {};
+            $scope.msgdisp = false;
+        };
     }
 ]);
